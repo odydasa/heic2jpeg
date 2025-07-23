@@ -13,16 +13,18 @@ Launcher: Lets user choose between CLI and GUI
 import subprocess
 import tkinter as tk
 
+
 def run_cli():
-    subprocess.run(["python", "src/heic2jpeg.py", "--help"])
+    subprocess.run(["python", "heic2jpeg.py", "--help"])
 
 
 def run_gui():
-    subprocess.run(["python", "src/heic2jpeg_gui.py"])
+    subprocess.run(["python", "heic2jpeg_gui.py"])
 
 
 root = tk.Tk()
 root.title("HEIC2JPEG Launcher")
+
 frame = tk.Frame(root, padx=30, pady=30)
 frame.pack()
 
@@ -33,4 +35,3 @@ tk.Button(frame, text="Run CLI (Command Line)", command=run_cli).pack(pady=5)
 tk.Button(frame, text="Run GUI (Graphical)", command=run_gui).pack(pady=5)
 
 root.mainloop()
-

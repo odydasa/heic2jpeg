@@ -11,18 +11,14 @@ GUI: HEIC2JPEG GUI using Tkinter
 """
 
 import os
-
 import sys
-
 import tkinter as tk
-
 from tkinter import filedialog, messagebox, ttk, scrolledtext
-
-import subprocess
-
 import importlib
+import subprocess
+from PIL import Image
+import pillow_heif
 
-# Auto-install required packages
 
 def install_if_missing(package, pip_name=None):
     pip_name = pip_name or package
@@ -31,33 +27,29 @@ def install_if_missing(package, pip_name=None):
     except ImportError:
         subprocess.check_call([sys.executable, "-m", "pip", "install", pip_name])
 
+
 install_if_missing("PIL", "pillow")
 install_if_missing("pillow_heif", "pillow-heif")
 
-
-from PIL import Image
-
-import pillow_heif
 pillow_heif.register_heif_opener()
 
-# Determine if file is HEIC based on header
 
 def is_probably_heic(file_path):
     try:
         with open(file_path, 'rb') as f:
             header = f.read(128)
             return b'ftyp' in header
-    except:
+    except Exception:
         return False
 
-# Convert a single file
 
 def convert_heic_to_jpg(input_path, output_dir, force=False, remove=False, log=None):
     base_name = os.path.splitext(os.path.basename(input_path))[0] + ".jpg"
     output_path = os.path.join(output_dir if output_dir else os.path.dirname(input_path), base_name)
 
     if os.path.exists(output_path) and not force:
-        if log: log.insert(tk.END, f"Skipped (exists): {output_path}\n")
+        if log:
+            log.insert(tk.END, f"Skipped (exists): {output_path}\n")
         return "skipped"
 
     try:
@@ -70,24 +62,27 @@ def convert_heic_to_jpg(input_path, output_dir, force=False, remove=False, log=N
         try:
             image = Image.open(input_path)
             image.save(output_path, format="JPEG")
-        except Exception as e:
-            if log: log.insert(tk.END, f"[ERROR] Failed: {input_path}\n")
+        except Exception:
+            if log:
+                log.insert(tk.END, f"[ERROR] Failed: {input_path}\n")
             return "failed"
 
     try:
         stat = os.stat(input_path)
         os.utime(output_path, (stat.st_atime, stat.st_mtime))
-    except:
+    except Exception:
         pass
 
     if remove:
-        try: os.remove(input_path)
-        except: pass
+        try:
+            os.remove(input_path)
+        except Exception:
+            pass
 
-    if log: log.insert(tk.END, f"[✓] Converted: {output_path}\n")
+    if log:
+        log.insert(tk.END, f"[✓] Converted: {output_path}\n")
     return "converted"
 
-# Collect HEIC files from file/folder input
 
 def collect_heic_files(paths):
     collected = []
@@ -113,10 +108,10 @@ def select_files_or_folders():
 
 def run_conversion():
     inputs = select_files_or_folders()
-    if not inputs: return
+    if not inputs:
+        return
 
-    output_dir = None  # Use input file's folder as output
-
+    output_dir = None
     force = force_var.get()
     remove = remove_var.get()
     verbose = verbose_var.get()
@@ -143,14 +138,14 @@ def run_conversion():
     messagebox.showinfo("Conversion Summary",
                         f"✓ Converted: {summary['converted']}\n→ Skipped: {summary['skipped']}\n✗ Failed: {summary['failed']}")
 
-# GUI Layout
+
 root = tk.Tk()
 root.title("HEIC2JPEG GUI Converter")
 
 try:
     icon_path = os.path.join(os.path.dirname(__file__), "..", "assets", "logo.ico")
     root.iconbitmap(icon_path)
-except:
+except Exception:
     pass
 
 frame = ttk.Frame(root, padding=20)
@@ -172,7 +167,3 @@ log_text = scrolledtext.ScrolledText(frame, width=80, height=18, state='disabled
 log_text.grid(column=0, row=3, columnspan=4, pady=10)
 
 root.mainloop()
-
-def main():
-    root.mainloop()
-

@@ -9,21 +9,17 @@ This tool and documentation were generated and assembled using ChatGPT.
 Uses pillow-heif (no C compiler needed)
 """
 
-
 import argparse
-
-import subprocess
-
-import importlib
-
-import os
-
-import sys
-
 import glob
+import importlib
+import os
+import subprocess
+import sys
+from PIL import Image
+import pillow_heif
+
 
 # Auto-install required dependencies
-
 def install_if_missing(package, pip_name=None):
     pip_name = pip_name or package
     try:
@@ -32,17 +28,14 @@ def install_if_missing(package, pip_name=None):
         print(f"[INFO] Installing: {pip_name}")
         subprocess.check_call([sys.executable, "-m", "pip", "install", pip_name])
 
+
 install_if_missing("PIL", "pillow")
 install_if_missing("pillow_heif", "pillow-heif")
 
-
-from PIL import Image
-
-import pillow_heif
 pillow_heif.register_heif_opener()
 
-# Check if file is likely a HEIC using FTYP header atom
 
+# Check if file is likely a HEIC using FTYP header atom
 def is_probably_heic(file_path):
     try:
         with open(file_path, 'rb') as f:
@@ -51,8 +44,8 @@ def is_probably_heic(file_path):
     except Exception:
         return False
 
-# Convert a single HEIC file
 
+# Convert a single HEIC file
 def convert_heic_to_jpg(input_path, output_dir=None, force=False, remove=False, verbose=False):
     base_name = os.path.splitext(os.path.basename(input_path))[0] + ".jpg"
     output_path = os.path.join(output_dir if output_dir else os.path.dirname(input_path), base_name)
@@ -95,8 +88,8 @@ def convert_heic_to_jpg(input_path, output_dir=None, force=False, remove=False, 
 
     return "converted"
 
-# Collect .heic files from single file, wildcard or directory
 
+# Collect .heic files from single file, wildcard or directory
 def collect_heic_files(paths):
     collected = []
     for path in paths:
@@ -111,8 +104,8 @@ def collect_heic_files(paths):
                         collected.append(os.path.join(root, f))
     return collected
 
-# Entry point for CLI usage
 
+# Entry point for CLI usage
 def main():
     parser = argparse.ArgumentParser(description="Convert HEIC images to JPEG")
     parser.add_argument("inputs", nargs="*", help="HEIC files, wildcard, or folders")
@@ -149,9 +142,6 @@ def main():
     print(f"  → Skipped:   {total['skipped']}")
     print(f"  ✗ Failed:    {total['failed']}")
 
-if __name__ == "__main__":
-    main()
 
 if __name__ == "__main__":
     main()
-
