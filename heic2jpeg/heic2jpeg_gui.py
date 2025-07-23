@@ -9,14 +9,21 @@ This tool and documentation were generated and assembled using ChatGPT.
 Uses pillow-heif (no C compiler needed)
 GUI: HEIC2JPEG GUI using Tkinter
 """
+
 import os
+
 import sys
+
 import tkinter as tk
+
 from tkinter import filedialog, messagebox, ttk, scrolledtext
+
 import subprocess
+
 import importlib
 
 # Auto-install required packages
+
 def install_if_missing(package, pip_name=None):
     pip_name = pip_name or package
     try:
@@ -27,11 +34,14 @@ def install_if_missing(package, pip_name=None):
 install_if_missing("PIL", "pillow")
 install_if_missing("pillow_heif", "pillow-heif")
 
+
 from PIL import Image
+
 import pillow_heif
 pillow_heif.register_heif_opener()
 
 # Determine if file is HEIC based on header
+
 def is_probably_heic(file_path):
     try:
         with open(file_path, 'rb') as f:
@@ -41,6 +51,7 @@ def is_probably_heic(file_path):
         return False
 
 # Convert a single file
+
 def convert_heic_to_jpg(input_path, output_dir, force=False, remove=False, log=None):
     base_name = os.path.splitext(os.path.basename(input_path))[0] + ".jpg"
     output_path = os.path.join(output_dir if output_dir else os.path.dirname(input_path), base_name)
@@ -77,6 +88,7 @@ def convert_heic_to_jpg(input_path, output_dir, force=False, remove=False, log=N
     return "converted"
 
 # Collect HEIC files from file/folder input
+
 def collect_heic_files(paths):
     collected = []
     for path in paths:
@@ -89,6 +101,7 @@ def collect_heic_files(paths):
                         collected.append(os.path.join(root, f))
     return collected
 
+
 def select_files_or_folders():
     files = filedialog.askopenfilenames(filetypes=[("HEIC files", "*.heic")])
     folder = filedialog.askdirectory(title="Choose Folder")
@@ -96,6 +109,7 @@ def select_files_or_folders():
     if folder:
         paths.append(folder)
     return paths
+
 
 def run_conversion():
     inputs = select_files_or_folders()
@@ -158,5 +172,7 @@ log_text = scrolledtext.ScrolledText(frame, width=80, height=18, state='disabled
 log_text.grid(column=0, row=3, columnspan=4, pady=10)
 
 root.mainloop()
+
 def main():
     root.mainloop()
+

@@ -9,14 +9,21 @@ This tool and documentation were generated and assembled using ChatGPT.
 Uses pillow-heif (no C compiler needed)
 """
 
+
 import argparse
+
 import subprocess
+
 import importlib
+
 import os
+
 import sys
+
 import glob
 
 # Auto-install required dependencies
+
 def install_if_missing(package, pip_name=None):
     pip_name = pip_name or package
     try:
@@ -28,11 +35,14 @@ def install_if_missing(package, pip_name=None):
 install_if_missing("PIL", "pillow")
 install_if_missing("pillow_heif", "pillow-heif")
 
+
 from PIL import Image
+
 import pillow_heif
 pillow_heif.register_heif_opener()
 
 # Check if file is likely a HEIC using FTYP header atom
+
 def is_probably_heic(file_path):
     try:
         with open(file_path, 'rb') as f:
@@ -42,6 +52,7 @@ def is_probably_heic(file_path):
         return False
 
 # Convert a single HEIC file
+
 def convert_heic_to_jpg(input_path, output_dir=None, force=False, remove=False, verbose=False):
     base_name = os.path.splitext(os.path.basename(input_path))[0] + ".jpg"
     output_path = os.path.join(output_dir if output_dir else os.path.dirname(input_path), base_name)
@@ -85,6 +96,7 @@ def convert_heic_to_jpg(input_path, output_dir=None, force=False, remove=False, 
     return "converted"
 
 # Collect .heic files from single file, wildcard or directory
+
 def collect_heic_files(paths):
     collected = []
     for path in paths:
@@ -100,6 +112,7 @@ def collect_heic_files(paths):
     return collected
 
 # Entry point for CLI usage
+
 def main():
     parser = argparse.ArgumentParser(description="Convert HEIC images to JPEG")
     parser.add_argument("inputs", nargs="*", help="HEIC files, wildcard, or folders")
@@ -138,6 +151,7 @@ def main():
 
 if __name__ == "__main__":
     main()
- 
+
 if __name__ == "__main__":
     main()
+

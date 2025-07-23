@@ -9,12 +9,17 @@ This tool and documentation were generated and assembled using ChatGPT.
 Uses pillow-heif (no C compiler needed)
 Launcher: Lets user choose between CLI and GUI
 """
+
 import subprocess
+
 import tkinter as tk
+
 from tkinter import messagebox
+
 
 def run_cli():
     subprocess.run(["python", "src/heic2jpeg.py", "--help"])
+
 
 def run_gui():
     subprocess.run(["python", "src/heic2jpeg_gui.py"])
@@ -31,3 +36,4 @@ tk.Button(frame, text="Run CLI (Command Line)", command=run_cli).pack(pady=5)
 tk.Button(frame, text="Run GUI (Graphical)", command=run_gui).pack(pady=5)
 
 root.mainloop()
+
