@@ -1,0 +1,6 @@
+site_name: HEIC2JPEG
+repo_url: https://github.com/odydasa/heic2jpeg
+theme:
+  name: material
+nav:
+  - Home: index.md
