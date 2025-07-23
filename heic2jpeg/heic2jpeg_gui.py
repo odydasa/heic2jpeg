@@ -158,3 +158,5 @@ log_text = scrolledtext.ScrolledText(frame, width=80, height=18, state='disabled
 log_text.grid(column=0, row=3, columnspan=4, pady=10)
 
 root.mainloop()
+def main():
+    root.mainloop()

@@ -58,3 +58,4 @@ venv/
 .vscode/
 
 desktop.ini
+make_pip_package.bat
